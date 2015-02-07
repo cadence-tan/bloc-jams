@@ -32,7 +32,7 @@ var albumMarconi = {
     ]
 };
 
-var currentlyPlayingSong = null;
+ var currentlyPlayingSong = null;
 
  var createSongRow = function(songNumber, songName, songLength) {
     var template =
@@ -69,10 +69,12 @@ var currentlyPlayingSong = null;
      // Toggle the play, pause, and song number based on which play/pause button we clicked on.
       var clickHandler = function(event) {
         var songNumber = $(this).data('song-number');
+         alert(songNumber);
 
         if (currentlyPlayingSong !== null) {
             // Revert to song number for currently playing song because user started playing new song.
             currentlyPlayingCell = $('.song-number[data-song-number="' + currentlyPlayingSong + '"]');
+            
             currentlyPlayingCell.html(currentlyPlayingSong);
           }
         
@@ -80,11 +82,13 @@ var currentlyPlayingSong = null;
             // Switch from Play -> Pause button to indicate new song is playing.
             $(this).html('<a class="album-song-button"><i class="fa fa-pause"></i></a>');
             currentlyPlayingSong = songNumber;
+            
           }
           else if (currentlyPlayingSong === songNumber) {
             // Switch from Pause -> Play button to pause currently playing song.
             $(this).html('<a class="album-song-button"><i class="fa fa-play"></i></a>');
             currentlyPlayingSong = null;
+            alert(currentlyPlayingSong);
           }
         };
 
@@ -126,7 +130,56 @@ var currentlyPlayingSong = null;
     }
   
   };
+
+
+  var updateSeekPercentage = function($seekBar, event) {
+     var barWidth = $seekBar.width();
+     // get mouse x offset here
+     var offsetX = event.pageX - $seekBar.offset().left;
+ 
+   
+    var offsetXPercent = (offsetX  / barWidth) * 100;
+       offsetXPercent = Math.max(0, offsetXPercent);
+       offsetXPercent = Math.min(100, offsetXPercent);
+     
+       var percentageString = offsetXPercent + '%';
+       $seekBar.find('.fill').width(percentageString);
+       $seekBar.find('.thumb').css({left: percentageString});
+   }
+
+
   
+ var setupSeekBars = function() {
+ 
+   $seekBars = $('.player-bar .seek-bar');
+   $seekBars.click(function(event) {
+     updateSeekPercentage($(this), event);
+   });
+
+   $seekBars.find('.thumb').mousedown(function(event){
+       var $seekBar = $(this).parent();
+
+       $seekBar.addClass('no-animate');
+
+    
+       $(document).bind('mousemove.thumb', function(event){
+         updateSeekPercentage($seekBar, event);
+       });
+    
+       //cleanup
+       $(document).bind('mouseup.thumb', function(){
+
+        $seekBar.removeClass('no-animate');
+
+         $(document).unbind('mousemove.thumb');
+         $(document).unbind('mouseup.thumb');
+       });
+    
+     });
+
+
+ };
+
   
 
  // This 'if' condition is used to prevent the jQuery modifications
@@ -135,11 +188,7 @@ var currentlyPlayingSong = null;
  if (document.URL.match(/\/album.html/)) {
   // Wait until the HTML is fully processed.
   $(document).ready(function() {
-
   	changeAlbumView(albumPicasso);
-
-
-  	
-    
+    setupSeekBars();    
   });
  }
