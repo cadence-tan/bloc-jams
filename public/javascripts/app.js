@@ -228,7 +228,7 @@ var albumMarconi = {
      var offsetX = event.pageX - $seekBar.offset().left;
    
      var offsetXPercent = (offsetX  / barWidth) * 100;
-       offsetXPercent = Math.max(0, offsetXPercsent);
+       offsetXPercent = Math.max(0, offsetXPercent);
        offsetXPercent = Math.min(100, offsetXPercent);
      
        var percentageString = offsetXPercent + '%';
@@ -285,16 +285,186 @@ var albumMarconi = {
 
 ;require.register("scripts/app", function(exports, require, module) {
 
-//require('./landing');
-//require('./album');
-//require('./collection');
-//require('./profile');
-console.log(angular);
+// require('./landing');
+// require('./album');
+// require('./collection');
+// require('./profile');
+
+
+
 
 
 angular.module('BlocJams', []).controller('Landing.controller', ['$scope', function($scope) {
- $scope.subText = "Turn the music up!";
+  
+  $scope.subText = "Turn the music up!";
+ 
+  $scope.subTextClicked = function() {
+  $scope.subText += '!';
+   };
+    
+  $scope.title = "Bloc Jams"; 
+  $scope.blocJamsClicked= function(o){
+  $scope.title += "!";
+       
+  for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+   return o;
+  };
+  
+  $scope.albumURLs = [
+     '/images/album-placeholders/album-1.jpg',
+     '/images/album-placeholders/album-2.jpg',
+     '/images/album-placeholders/album-3.jpg',
+     '/images/album-placeholders/album-4.jpg',
+     '/images/album-placeholders/album-5.jpg',
+     '/images/album-placeholders/album-6.jpg',
+     '/images/album-placeholders/album-7.jpg',
+     '/images/album-placeholders/album-8.jpg',
+     '/images/album-placeholders/album-9.jpg',
+   ];
 }]);
+});
+
+;require.register("scripts/collection", function(exports, require, module) {
+var buildAlbumThumbnail = function() {
+	var template =
+	'<div class="collection-album-container col-md-2">'
+	+ '  <div class="collection-album-image-container">'
+	+ '  <img src="/images/album-placeholder.png"/>'
+	+ '  </div>'
+	+ '  <div class="caption album-collection-info">'
+	+ '    <p>'
+	+ '      <a class="album-name" href="/album.html"> Album Name </a>'
+	+ '      <br/>'
+	+ '      <a href="/album.html"> Artist name </a>'
+	+ '      <br/>'
+	+ '      X songs'
+	+ '      <br/>'
+	+ '	  	 X:XX Total Length'
+	+ '		 <br/>'
+	+ '    </p>'
+	+ '  </div>'
+	+ '</div>';
+
+	return $(template);
+};
+
+
+var buildAlbumOverlay = function(albumURL) {
+  var template =
+      '<div class="collection-album-image-overlay">'
+    + '  <div class="collection-overlay-content">'
+    + '    <a class="collection-overlay-button" href="' + albumURL + '">'
+    + '      <i class="fa fa-play"></i>'
+    + '    </a>'
+    + '    &nbsp;'
+    + '    <a class="collection-overlay-button">'
+    + '      <i class="fa fa-plus"></i>'
+    + '    </a>'
+    + '  </div>'
+    + '</div>'
+    ;
+  return $(template);
+};
+
+var updateCollectionView = function() {
+  var $collection = $(".collection-container .row");
+  //Empty entire collection, ensure there is only one in a page
+  $collection.empty();
+
+  for (var i = 0; i < 33; i++) {
+    var $newThumbnail = buildAlbumThumbnail();
+    $collection.append($newThumbnail);
+  }
+
+  var onHover = function(event) {
+     $(this).append(buildAlbumOverlay("/album.html"));
+   };
+
+   var offHover = function(event) {
+      $(this).find('.collection-album-image-overlay').remove();
+    };
+
+   $collection.find('.collection-album-image-container').hover(onHover, offHover);
+
+};
+
+if (document.URL.match(/\/collection.html/)) {
+  // Wait until the HTML is fully processed.
+	 $(document).ready(function() {
+	     // Your code goes here.
+	 updateCollectionView();
+	});
+}
+});
+
+;require.register("scripts/landing", function(exports, require, module) {
+$(document).ready(function() { 
+  //Add an exclamation point to the end of "Turn the music up!" 
+   $('.hero-content h3').click(function(){
+     var subText = $(this).text();
+     $(this).text(subText + "!");
+   });
+
+  //Animate selling points on hover
+   var onHoverAction = function(event){
+    console.log('Hover action triggered.');
+    $(this).animate({'margin-top':'10px'});
+  };
+
+  var offHoverAction = function(event) {
+    console.log('off-Hover action triggered');
+    $(this).animate({'margin-top':'0px'});
+  };
+
+  $('.selling-points .point').hover(onHoverAction, offHoverAction);
+
+
+  //Change the "Turn the music up!" colors on a hover event
+  $('.hero-content h3').hover(function(){
+    // this will execute when we hover over the object
+    console.log('Hover action triggered.');
+     $(this).css('color', 'red');
+  }, function(){
+    // this will execute when we hover off the object
+    console.log('off-Hover action triggered');
+     $(this).css('color', 'white');
+  });
+
+  //Change the font-size of the selling points on a click event
+  $(".selling-points .point h5").click(function(){       
+    $(this).animate({fontSize: '29px'}, "slow");
+  });
+
+ //Bloc Jams header fade-out when it's clicked 
+  $( ".navbar-header").click(function() {
+    $(this).fadeOut( "slow" );
+  });
+});
+});
+
+;require.register("scripts/profile", function(exports, require, module) {
+//holds the name of our tab button container for selection later in the function
+var tabsContainer = ".user-profile-tabs-container";
+
+var selectTabHandler = function(event){
+  $tab = $(this);
+  $(tabsContainer + "1i").removeClass('active');
+  $tab.parent().addClass('active');
+  selectTabName = $tab.attr('href');
+ 
+  $(".tab-pane").addClass('hidden');
+  $(selectTabName).removeClass('hidden');
+  event.preventDefault();
+};
+
+
+if (document.URL.match(/\/profile.html/)) {
+  $(document).ready(function() {
+    var $tabs = $(tabsContainer + " a");
+    $tabs.click(selectTabHandler);
+    $tabs[0].click();
+  });
+}
 });
 
 ;
