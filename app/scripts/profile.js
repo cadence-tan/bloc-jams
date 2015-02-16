@@ -6,7 +6,7 @@ var selectTabHandler = function(event){
   $(tabsContainer + "1i").removeClass('active');
   $tab.parent().addClass('active');
   selectTabName = $tab.attr('href');
-  console.log(selectedTabName);
+ 
   $(".tab-pane").addClass('hidden');
   $(selectTabName).removeClass('hidden');
   event.preventDefault();
