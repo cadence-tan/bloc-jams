@@ -135,7 +135,7 @@ var albumMarconi = {
      var offsetX = event.pageX - $seekBar.offset().left;
    
      var offsetXPercent = (offsetX  / barWidth) * 100;
-       offsetXPercent = Math.max(0, offsetXPercsent);
+       offsetXPercent = Math.max(0, offsetXPercent);
        offsetXPercent = Math.min(100, offsetXPercent);
      
        var percentageString = offsetXPercent + '%';
