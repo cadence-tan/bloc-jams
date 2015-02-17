@@ -1,14 +1,13 @@
 //holds the name of our tab button container for selection later in the function
 var tabsContainer = ".user-profile-tabs-container";
-
-var selectTabHandler = function(event){
+var selectTabHandler = function(event) {
   $tab = $(this);
-  $(tabsContainer + "1i").removeClass('active');
+  $(tabsContainer + " li").removeClass('active');
   $tab.parent().addClass('active');
-  selectTabName = $tab.attr('href');
- 
+  selectedTabName = $tab.attr('href');
+  console.log(selectedTabName);
   $(".tab-pane").addClass('hidden');
-  $(selectTabName).removeClass('hidden');
+  $(selectedTabName).removeClass('hidden');
   event.preventDefault();
 };
 
