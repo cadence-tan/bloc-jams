@@ -290,6 +290,23 @@ var albumMarconi = {
 // require('./collection');
 // require('./profile');
 
+// Example Album
+var albumPicasso = {
+  name: 'The Colors',
+  artist: 'Pablo Picasso',
+  label: 'Cubism',
+  year: '1881',
+  albumArtUrl: '/images/album-placeholder.png',
+
+  songs: [
+      { name: 'Blue', length: '4:26' },
+      { name: 'Green', length: '3:14' },
+      { name: 'Red', length: '5:01' },
+      { name: 'Pink', length: '3:21'},
+      { name: 'Magenta', length: '2:15'}
+    ]
+};
+
 
  blocJams = angular.module('BlocJams', ['ui.router']);
 
@@ -301,6 +318,12 @@ var albumMarconi = {
      controller: 'Landing.controller',
      templateUrl: '/templates/landing.html'
    })
+   
+    $stateProvider.state('collection', {
+     url: '/collection',
+     controller: 'Collection.controller',
+     templateUrl: '/templates/collection.html'
+   });
    
    $stateProvider.state('/song', {
      url: '/song',
@@ -342,7 +365,13 @@ var albumMarconi = {
      '/images/album-placeholders/album-9.jpg',
    ];
 }]);
-
+    
+ blocJams.controller('Collection.controller', ['$scope', function($scope) {
+   $scope.albums = [];
+      for (var i = 0; i < 33; i++) {
+     $scope.albums.push(angular.copy(albumPicasso));
+   }
+ }]);
 
 
 });
@@ -468,15 +497,14 @@ $(document).ready(function() {
 ;require.register("scripts/profile", function(exports, require, module) {
 //holds the name of our tab button container for selection later in the function
 var tabsContainer = ".user-profile-tabs-container";
-
-var selectTabHandler = function(event){
+var selectTabHandler = function(event) {
   $tab = $(this);
-  $(tabsContainer + "1i").removeClass('active');
+  $(tabsContainer + " li").removeClass('active');
   $tab.parent().addClass('active');
-  selectTabName = $tab.attr('href');
- 
+  selectedTabName = $tab.attr('href');
+  console.log(selectedTabName);
   $(".tab-pane").addClass('hidden');
-  $(selectTabName).removeClass('hidden');
+  $(selectedTabName).removeClass('hidden');
   event.preventDefault();
 };
 
