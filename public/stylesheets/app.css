@@ -75,6 +75,9 @@ td.song-number {
 .first {
   background-color: #262434; }
 
+.last {
+  background-color: #6901b5; }
+
 .collection-album-container {
   margin-top: 30px;
   margin-bottom: 20px; }
