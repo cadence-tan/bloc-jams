@@ -69,6 +69,12 @@ td.song-number {
   height: 70px;
   text-align: center; }
 
+.dark {
+  background-color: #504d6c; }
+
+.first {
+  background-color: #262434; }
+
 .collection-album-container {
   margin-top: 30px;
   margin-bottom: 20px; }
@@ -430,6 +436,14 @@ body.landing .navbar {
 /* medium-purple: #7B46A3 - 123, 70, 163 */
 .player-header-nav {
   background-color: rgba(123, 70, 163, 0.9); }
+  .player-header-nav .navbar-nav a {
+    line-height: 45px;
+    color: white;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1.2; }
+    .player-header-nav .navbar-nav a:hover {
+      color: rgba(123, 70, 163, 0.9); }
 
 
 /*# sourceMappingURL=app.css.map*/
