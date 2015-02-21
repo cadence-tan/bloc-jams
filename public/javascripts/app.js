@@ -339,7 +339,7 @@ var albumPicasso = {
  
 
  // This is a cleaner way to call the controller than crowding it on the module definition.
-  blocJams.controller('Landing.controller', ['$scope', function($scope) {
+  blocJams.controller('Landing.controller', ['$scope', 'Logger', function($scope, Logger) {
    
    
   $scope.subText = "Turn the music up!";
@@ -370,22 +370,26 @@ var albumPicasso = {
      '/images/album-placeholders/album-8.jpg',
      '/images/album-placeholders/album-9.jpg',
    ];
+  
+  Logger.print("Hello World!");//logs "Hello World!
+  
 }]);
     
- blocJams.controller('Collection.controller', ['$scope', function($scope) {
+ blocJams.controller('Collection.controller', ['$scope', 'Logger', function($scope, Logger) {
    $scope.albums = [];
      for (var i = 0; i < 33; i++) {
      $scope.albums.push(angular.copy(albumPicasso));
-   }
+   }s
+   
+   Logger.print("Hello World!");  // logs "Hello World!"
+   
  }]);
     
-  blocJams.controller('Album.controller', ['$scope', function($scope) {
+ blocJams.controller('Album.controller', ['$scope', 'SongPlayer', 'Logger', function($scope, SongPlayer, Logger) {
+
    $scope.album = angular.copy(albumPicasso);
-    $scope.bgColor = "red";
-    
     
    var hoveredSong = null;
-   var playingSong = null;
    
    $scope.onHoverSong = function(song){
      hoveredSong = song;
@@ -396,7 +400,7 @@ var albumPicasso = {
    };
     
    $scope.getSongState = function(song) {
-     if (song === playingSong) {
+     if (song === SongPlayer.currentSong && SongPlayer.playing) {
        return 'playing';
      }
      else if (song === hoveredSong) {
@@ -406,14 +410,48 @@ var albumPicasso = {
    };
     
    $scope.playSong =  function(song){
-     playingSong = song;
+     SongPlayer.setSong($scope.album, song);
+     SongPlayer.play();
    };
     
    $scope.pauseSong = function(song){
-     playingSong = null;
+      SongPlayer.pause();
    }
+   
+   Logger.print("Hello World!");//logs Hello World!
  }]);
     
+ blocJams.controller('PlayerBar.controller', ['$scope', 'SongPlayer', function($scope, SongPlayer) {
+   $scope.songPlayer = SongPlayer;
+ }]);
+    
+ blocJams.service('SongPlayer', function() {
+   return {
+     currentSong: null,
+     currentAlbum: null,
+     playing: false,
+ 
+     play: function() {
+       this.playing = true;
+     },
+     pause: function() {
+       this.playing = false;
+     },
+     setSong: function(album, song) {
+       this.currentAlbum = album;
+       this.currentSong = song;
+     }
+   };
+ });
+  
+  blocJams.service('Logger', function() {
+    this.print =  function(msg){
+      console.log(msg);
+    };
+})
+
+  
+
  
 
 
