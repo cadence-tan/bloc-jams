@@ -252,3 +252,28 @@ var albumPicasso = {
     }
   };
 });
+    
+
+blocJams.directive('clickMe', function(){
+      return{
+        restrict: 'E',
+        link: function(scope, element, attrs){ 
+          element.click(function(){
+             alert("Clicked");          
+           })
+        }
+      };
+   });
+
+blocJams.directive('countHoverTime', function(){
+      return{
+        restrict: 'A',
+        link: function(scope, element, attrs){
+          attrs.hover(function(){
+             alert("Hovered");          
+           })
+        }
+      };
+});
+  
+    
